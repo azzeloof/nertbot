@@ -4,6 +4,7 @@ from imutils import contours as imcontours
 import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\Tesseract.exe'
 from matplotlib import pyplot as plt
+import io
 
 red = (0, 0, 255)
 green = (0, 255, 0)
@@ -219,10 +220,14 @@ def drawPlot(players):
         ax.plot(player.cumScore, label=player.name)
     ax.set(title="nert", xlabel="Round", ylabel="Score")
     ax.legend()
-    plt.show()
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    return buf
+    #plt.show()
 
-if __name__ == "__main__":
-    image = cv2.imread("nert2.png")
+
+def processScreenshot(image):
     h,w,c = image.shape
     scoreboard = findScoreboard(image)
     gray = cv2.cvtColor(scoreboard, cv2.COLOR_BGR2GRAY)
@@ -231,6 +236,12 @@ if __name__ == "__main__":
     contoured, players = getContours(scoreboard, thresh, h*w)
     players = parseData(thresh, players)
     players = calcScores(players)
-    drawPlot(players)
-    cv2.imshow('image', contoured)
-    cv2.waitKey(0)
+    plotBuffer = drawPlot(players)
+    return plotBuffer
+    #cv2.imshow('image', contoured)
+    #cv2.waitKey(0)
+
+if __name__ == "__main__":
+    image = cv2.imread("samples/nert0.png")
+    processScreenshot(image)
+    
