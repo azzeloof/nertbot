@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from imutils import contours as imcontours
 import pytesseract
+# Comment out the following line if running on linux
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\Tesseract.exe'
 from matplotlib import pyplot as plt
 import io
@@ -23,9 +24,11 @@ class Player:
 
 
 def within(A, B, T):
+    # Checks if A and B are within a tolerance T
     return (abs(A-B) <= T)
 
 def similarColor(pixel, color, threshold):
+    # Checks if a pixel is similar to a defined color
     isSimilar = True
     for i in range(0,len(pixel)-1):
         if not within(pixel[i], color[i], threshold):
@@ -46,6 +49,7 @@ def borders(A, B, T):
     return within(xA,xB2,T) and within(yA,yB,T)
 
 def findScoreboard(image):
+    # Locates the Nerts scoreboard and returns a cropped image
     scoreboardColor = [49,42,19]
     blur = cv2.GaussianBlur(image, (5,5), 0)
     h,w,c = image.shape
@@ -53,6 +57,7 @@ def findScoreboard(image):
     xMax = 0
     yMin = h
     yMax = 0
+    # Find the four corners by color
     for y in range(0,h):
         for x in range(0,w):
             if similarColor(blur[y,x], scoreboardColor, 1):
@@ -65,16 +70,6 @@ def findScoreboard(image):
                 if y > yMax:
                     yMax = y
     return(image[yMin:yMax, xMin:xMax])
-
-def removeArray(L,arr):
-    ind = 0
-    size = len(L)
-    while ind != size and not np.array_equal(L[ind],arr):
-        ind += 1
-    if ind != size:
-        L.pop(ind)
-    else:
-        raise ValueError('array not found in list.')
 
 def getContours(original, thresh, imageArea):
     cuttoffFactor = 2074
@@ -237,9 +232,9 @@ def processScreenshot(image):
     players = parseData(thresh, players)
     players = calcScores(players)
     plotBuffer = drawPlot(players)
-    return plotBuffer
     #cv2.imshow('image', contoured)
     #cv2.waitKey(0)
+    return plotBuffer
 
 if __name__ == "__main__":
     image = cv2.imread("samples/nert0.png")
