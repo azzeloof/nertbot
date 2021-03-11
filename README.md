@@ -21,9 +21,9 @@ Nertbot runs on Python 3. It requires the following packages, all available via 
 * discord
 * pillow
 
-Check out the [Tesseract manual](https://tesseract-ocr.github.io/tessdoc/Installation.html) for installation information. You'll also need the full tesseract model that includes legacy support, which can be found [here](https://github.com/tesseract-ocr/tessdata). The filename is `eng.traineddata`. You'll have to replace the file tesseract installs with this one- its location varies on different operating systems.
+Check out the [Tesseract manual](https://tesseract-ocr.github.io/tessdoc/Installation.html) for installation information. You'll also need the full tesseract model that includes legacy support, which can be found [here](https://github.com/tesseract-ocr/tessdata). The filename is `eng.traineddata`. You'll have to replace the file Tesseract installs with this one- its location varies on different operating systems.
 
-It not running on Windows, you'll have to comment out the folloeing line in `nertbot.py`:
+It not running on Windows, you'll have to comment out the following line in `nertbot.py`:
 
 `pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\Tesseract.exe'`
 
